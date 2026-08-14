@@ -1,43 +1,41 @@
 const express = require('express')
-const app = express()
-const port = process.env.PORT || 8080
-const users=[{
-    "id":1,
-    "name":"John Doe",
-    "gender":"male",
-    "image":"https://randomuser.me/api/portraits/men/1.jpg"
-},
-{
-    "id":2,
-    "name":"Jane Doe",
-    "gender":"female",
-    "image":"https://randomuser.me/api/portraits/women/10.jpg"
-},
-{
-    "id":3,
-    "name":" Juan Price",
-    "gender":"male",
-    "image":"https://randomuser.me/api/portraits/men/53.jpg"
-},
-{
-    "id":4,
-    "name":"Harcourt Olivier",
-    "gender":"male",
-    "image":"https://randomuser.me/api/portraits/men/34.jpg"
-},
-{
-    "id":5,
-    "name":"Harris Scarlett",
-    "gender":"Female",
-    "image":"https://randomuser.me/api/portraits/women/95.jpg"
-}]
 
+
+const app = express()
+
+
+app.use(express.json())
+
+
+const port = process.env.PORT || 8080
+
+
+const users = [
+ {
+   "id" : 1,
+   "name" : "Alejandra Romero",
+   "gender" : "male",
+   "image" : "https://randomuser.me/api/portraits/women/62.jpg"
+ },
+ {
+   "id" : 2,
+   "name" : "Olivia Morris",
+   "gender" : "female",
+   "image" : "https://randomuser.me/api/portraits/women/31.jpg"
+ }
+]
+
+
+// api server
+
+
+// get all users
 app.get("/api/users", function(req, res){
-    res.status(200).json(users)
+ res.status(200).json(users);
 })
 
 
-    function getUserById(uid){
+function getUserById(uid){
  for(var i=0; i<users.length; i++)
  {
    if(uid == users[i].id)
@@ -53,6 +51,7 @@ app.get("/api/users/:id", function(req, res)
  var uid = req.params.id;
  var userid = getUserById(uid);
 
+
  if(userid == -1)
  {
    res.status(404).json({"message" : "user not found"})
@@ -60,20 +59,74 @@ app.get("/api/users/:id", function(req, res)
  res.status(200).json(users[userid])
 })
 
+
+// get random user
 app.get("/api/randomuser", function(req, res){
-    var n = users.length;
-    const randomid = Math.floor(Math.random() * n);
-    res.status(200).json(users[randomid])
+ var n = users.length;
+ const randomid = Math.floor(Math.random() * n);
+ res.status(200).json(users[randomid])
 })
 
-app.post("/api/users", function(req, res){
-    let user =req.body;
-    user.id = newuserid;
-    newuserid++;
-    users.push(user);
-    res.status(200).json("message":"user added successfully")
-}
-app.use(express.static('frontend'))
-app.listen(port, function(){
-console.log("my app is running at http://localhost:" + port)
+
+var newuserid = users.length + 1;
+
+
+// post: add a new user
+app.post("/api/users", function(req, res)
+{
+ if(!req.body.name || !req.body.gender || !req.body.image)
+   return res.json({"message" : " name, gender and image is required"})
+ let user = req.body;
+ user.id = newuserid;
+ newuserid++;
+ users.push(user)
+ res.status(200).json({"message" : "added successfully"});
+})
+
+
+// put: update user details of given id
+app.put("/api/users/:id", function(req, res){
+ var userid = getUserById(req.params.id);
+
+
+ if(userid == -1)
+   return res.json({"message" : "user not found"})
+
+
+   if(req.body.name)
+     users[userid].name = req.body.name;
+
+
+   if(req.body.gender)
+     users[userid].gender = req.body.gender;
+
+
+   if(req.body.image)
+     users[userid].image = req.body.image;
+
+
+   return res.status(200).json({"message" : "user details updated", "user" : users[userid]})
+})
+
+
+app.delete("/api/users/:id", function(req, res){
+ var userid = getUserById(req.params.id);
+ if(userid == -1)
+   return res.json({"message" : "user not found"})
+
+
+ users.splice(userid, 1);
+
+
+ res.status(200).json({"message" : "user deleted successfully"})
+
+
+})
+
+
+app.use(express.static("frontend")) // web server
+
+
+app.listen(port, function (){
+ console.log("my app is running at http://localhost:"+port)
 })
