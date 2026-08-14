@@ -6,7 +6,7 @@ const users = [
  },
    {
    "name" : "Jane Doe",
-   "gender" : "Feale",
+   "gender" : "Female",
    "image" : "jane.png"
  }
 ]
@@ -21,8 +21,21 @@ function toggle(){
  else
    curIndex = 0;
 
-
  document.getElementById("card-image").src = users[curIndex].image
- document.getElementById("card-name").innerText =users[curIndex].name
+ document.getElementById("card-name").innerText = users[curIndex].name
  document.getElementById("card-gender").innerText =users[curIndex].gender
+}
+function random()
+{
+  fetch('https://randomuser.me/api/')
+  .then(function(response )
+  {return response.json()})
+  .then(function(data)
+  {
+    details = data.results[0];
+    document.getElementById("card-image").src = details.picture.large;
+     var fullname= details.name.title+" "+details.name.first + " " + details.name.last;
+ document.getElementById("card-name").innerText =fullname
+    document.getElementById("card-gender").innerText = details.gender;
+  })
 }
