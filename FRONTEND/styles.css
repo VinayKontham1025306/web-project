@@ -6,7 +6,9 @@
 h1{
  color : red;
 }
-
+.navbar{
+    text-align: center;
+}
 
 .card{
  border-style: solid;
@@ -36,6 +38,7 @@ font-family: , Helvetica, sans-serif;
 
 body{
  background-color: antiquewhite;
+ margin: 0;
 }
 
 
@@ -50,4 +53,32 @@ body{
 .card button:hover{
  background-color: black;
  color: white;
+}
+
+.navbar{
+ text-align: center;
+
+
+ /* border-style: solid;
+ border-width: 3px;
+ border-color: black; */
+
+
+ border-bottom: 3px solid black;
+ padding-bottom: 20px;
+ padding-top: 20px;
+ background-color: rgb(249, 240, 240);
+ 
+}
+
+
+.navbar a{
+ margin-right: 23px;
+ color: gray;
+ text-decoration: none;
+}
+
+.navbar a:hover{
+ color: rgb(163, 67, 67);
+ text-decoration: underline;
 }
